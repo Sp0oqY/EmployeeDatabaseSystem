@@ -113,4 +113,70 @@ public class DatabazaZamestnancov {
             }
         }
     }
+
+    public void vypisStatistiku(){
+        if(zamestnanci.isEmpty()){
+            System.out.println("Databaza je prazdna a nie je mozne spravit statistiku.");
+            return;
+        }
+
+        Zamestnanec najviacVazieb = null;
+        int maxVazieb = -1;
+
+        int zla = 0;
+        int priemerna = 0;
+        int dobra = 0;
+
+        for (Zamestnanec z : zamestnanci){
+            int pocetVazieb = z.getSpolupracovnici().size();
+            if(pocetVazieb > maxVazieb){
+                maxVazieb = pocetVazieb;
+                najviacVazieb = z;
+            }
+        
+            for(Spolupraca s : z.getSpolupracovnici()){
+                if(s.getUroven() == Uroven.Zla) {
+                    zla++;
+                }else if(s.getUroven() == Uroven.Priemerna) {
+                    priemerna++;
+                }else if(s.getUroven() == Uroven.Dobra) {
+                    dobra++;
+                }
+            }
+        }
+
+        System.out.println("---- CELKOVE STATISTIKY ----");
+
+        if(najviacVazieb != null){
+            System.out.println("Zamestnanec s najviac vazbammi: " + najviacVazieb.getMeno() + " " + najviacVazieb.getPriezvisko() + "(pocet: " + maxVazieb + ")");
+        }
+
+        System.out.print("Prevazujuca kvalita spoluprace: ");
+        if(zla >= priemerna && zla >= dobra){
+            System.out.println("zla");
+        }else if(priemerna >= zla && priemerna >= dobra){
+            System.out.println("priemerna");
+        }else if(dobra >= priemerna && dobra >= zla){
+            System.out.println("dobra");
+        }
+    }
+
+    public void vypisPocetZamestnancov(){
+        int pocetAnalytikov = 0;
+        int pocetSpecialistov = 0;
+
+        for(Zamestnanec z : zamestnanci){
+            if(z instanceof DatovyAnalytik){
+                pocetAnalytikov++;
+            }else if(z instanceof BezpecnostnySpecialista){
+                pocetSpecialistov++;
+            }
+        }
+
+        System.out.println("---- POCET ZAMESTNANCOV V SKUPINACH ----");
+        System.out.println("Datovi analytici: " + pocetAnalytikov);
+        System.out.println("Bezpecnostni specialisti: " + pocetSpecialistov);
+        System.out.println("Celkovy pocet: " + zamestnanci.size());
+    }
 }
+

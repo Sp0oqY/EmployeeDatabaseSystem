@@ -18,6 +18,8 @@ public class Main {
             System.out.println("d) Vypis informacie o zamestnancovi (cez ID)");
             System.out.println("e) Spustit dovednost zamestnanca (Analyza/Riziko)");
             System.out.println("f) Vypis zoznamu abecedne");
+            System.out.println("g) Statistika");
+            System.out.println("h) Pocet zamestnancov v skupinach");
             System.out.println("x) Ukoncit");
             System.out.print("Vasa volba: ");
 
@@ -75,6 +77,14 @@ public class Main {
 
                 case "f":
                     db.vypisAbecedne();
+                    break;
+
+                case "g":
+                    db.vypisStatistiku();
+                    break;
+
+                case "h":
+                    db.vypisPocetZamestnancov();
                     break;
 
                 case "x":
