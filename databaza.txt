@@ -1,0 +1,5 @@
+---- AKTUALNY STAV DATABAZE ----
+ID: 4 | viktoria pavolova
+Typ: Analytik
+Pocet kolegov: 0
+--------------------------------------

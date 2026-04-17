@@ -1,9 +1,12 @@
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException{
 
         DatabazaZamestnancov db = new DatabazaZamestnancov();
+        db.nacitajData();
+
         Scanner sc = new Scanner(System.in);
         boolean bezi = true;
 
@@ -88,6 +91,7 @@ public class Main {
                     break;
 
                 case "x":
+                    db.ulozData();
                     bezi = false;
                     System.out.println("Program sa ukoncuje...");
                     break;
@@ -97,5 +101,6 @@ public class Main {
             }
             }
             sc.close();
+
         }
     }

@@ -1,4 +1,4 @@
-public class Spolupraca{
+public class Spolupraca implements java.io.Serializable{
 
     private Zamestnanec kolega;
     private Uroven uroven;

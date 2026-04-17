@@ -1,3 +1,11 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class DatabazaZamestnancov {
@@ -17,6 +25,7 @@ public class DatabazaZamestnancov {
 
         zamestnanci.add(novyZamestnanec);
         System.out.println("Zamestnanec pridany s ID: " + prideleneID);
+        automatickeUlozenie();
     }
 
     public Zamestnanec najdiPodlaID(int id){
@@ -40,6 +49,8 @@ public class DatabazaZamestnancov {
         }else{
             System.out.println("Jeden zo zamestnancov nebol najdeny.");
         }
+
+        automatickeUlozenie();
     }
 
     public void odoberZamestnanca(int id){
@@ -57,6 +68,8 @@ public class DatabazaZamestnancov {
 
         zamestnanci.remove(naOdstranenie);
         System.out.println("Zamestnanec s ID: " + id + " bol odstraneny.");
+
+        automatickeUlozenie();
     }
 
     public void vypisZamestnanca(int id) {
@@ -177,6 +190,50 @@ public class DatabazaZamestnancov {
         System.out.println("Datovi analytici: " + pocetAnalytikov);
         System.out.println("Bezpecnostni specialisti: " + pocetSpecialistov);
         System.out.println("Celkovy pocet: " + zamestnanci.size());
+    }
+
+    private void automatickeUlozenie() {
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter("databaza.txt"))) {
+            writer.println("---- AKTUALNY STAV DATABAZE ----");
+
+            for (Zamestnanec z : zamestnanci) {
+                writer.println("ID: " + z.getId() + " | " + z.getMeno() + " " + z.getPriezvisko());
+                writer.println("Typ: " + (z instanceof DatovyAnalytik ? "Analytik" : "Specialista"));
+                writer.println("Pocet kolegov: " + z.getSpolupracovnici().size());
+                writer.println("--------------------------------------");
+            }
+
+        } catch (IOException e) {
+
+        }
+    }
+
+    public void ulozData() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.bin"))) {
+            
+            oos.writeObject(zamestnanci);
+            oos.writeInt(dalsieID);
+
+        } catch (IOException e) {
+
+        }
+    }
+
+    public void nacitajData() {
+        File subor = new File("data.bin");
+        if (!subor.exists()) 
+        {
+            return;
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(subor))) {
+            
+            zamestnanci = (List<Zamestnanec>) ois.readObject();
+            dalsieID = ois.readInt();
+            
+        } catch (Exception e) {
+        }
     }
 }
 

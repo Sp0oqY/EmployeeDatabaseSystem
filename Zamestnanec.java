@@ -1,6 +1,6 @@
 import java.util.*;
 
-public abstract class Zamestnanec{
+public abstract class Zamestnanec implements java.io.Serializable{
     private int id;
     private String meno;
     private String priezvisko;
