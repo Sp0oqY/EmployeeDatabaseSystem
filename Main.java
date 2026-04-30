@@ -12,23 +12,24 @@ public class Main
         Scanner sc = new Scanner(System.in);
         boolean bezi = true;
 
-        System.out.println("----DATABAZOVY SYSTEM ZAMESTNANCOV----");
+        System.out.println("----DATABÁZOVY SYSTÉM ZAMESTNANCOV----");
 
         while(bezi)
             {
 
             System.out.println("\nMENU:");
-            System.out.println("a) Pridat zamestnanca (Analytik/Specialista)");
-            System.out.println("b) Pridat spolupracu (cez ID)");
-            System.out.println("c) Odobrat zamestnanca (podla ID)");
-            System.out.println("d) Vypis informacie o zamestnancovi (cez ID)");
-            System.out.println("e) Spustit dovednost zamestnanca (Analyza/Riziko)");
-            System.out.println("f) Vypis zoznamu abecedne");
-            System.out.println("g) Statistika");
-            System.out.println("h) Pocet zamestnancov v skupinach");
+            System.out.println("a) Pridať zamestnanca (Analytik/Špecialista)");
+            System.out.println("b) Pridať spoluprácu (cez ID)");
+            System.out.println("c) Odobrať zamestnanca (podľa ID)");
+            System.out.println("d) Výpis informácie o zamestnancovi (cez ID)");
+            System.out.println("e) Spustiť dovednosť zamestnanca (Analýza/Riziko)");
+            System.out.println("f) Výpis zoznamu abecedne");
+            System.out.println("g) Štatistika");
+            System.out.println("h) Počet zamestnancov v skupinách");
             System.out.println("i) Uložiť zamestnanca do textového súboru");
-            System.out.println("x) Ukoncit");
-            System.out.print("Vasa volba: ");
+            System.out.println("i) Načítať zamestnanca z textového súboru");
+            System.out.println("x) Ukončiť");
+            System.out.print("Vaša volba: ");
 
             String volba = sc.nextLine().toLowerCase();
 
@@ -52,7 +53,7 @@ public class Main
                 int id1 = Integer.parseInt(sc.nextLine());
                 System.out.print("Zadajte ID kolegu: ");
                 int id2 = Integer.parseInt(sc.nextLine());
-                System.out.print("Uroven (Zla/Priemerna/Dobra): ");
+                System.out.print("Úroveň (Zla/Priemerna/Dobra): ");
                 String urovenText = sc.nextLine();
                 if (!urovenText.isEmpty()) {
                      urovenText = urovenText.substring(0, 1).toUpperCase() + urovenText.substring(1).toLowerCase();
@@ -61,7 +62,7 @@ public class Main
                     Uroven ur = Uroven.valueOf(urovenText);
                     db.pridajSpolupracu(id1, id2, ur);
                 }catch(IllegalArgumentException e){
-                    System.out.print("Chyba: neplatna uroven! Pouzite: Zla, Priemerna alebo Dobra.");
+                    System.out.print("Neplatná úroveň. Použite: Zla, Priemerna alebo Dobra.");
                 }
                 break;
 
@@ -72,7 +73,7 @@ public class Main
                     break;
 
                 case "d":
-                    System.out.print("Zadajte ID zamestnanca pre vyhladavanie: ");
+                    System.out.print("Zadajte ID zamestnanca pre vyhľadávanie: ");
                         int idHladany = Integer.parseInt(sc.nextLine());
                         db.vypisZamestnanca(idHladany);
                     break;
@@ -103,14 +104,20 @@ public class Main
                     db.ulozZamestnancaDoSuboru(idNaUlozenie, menoSuboruUlozit);
                     break;
 
+                case "j":
+                    System.out.print("Zadajte názov súboru na načítanie: ");
+                    String menoSuboruNacitat = sc.nextLine();
+                    db.nacitajZamestnancaZoSuboru(menoSuboruNacitat);
+                    break;
+
                 case "x":
                     db.ulozData();
                     bezi = false;
-                    System.out.println("Program sa ukoncuje...");
+                    System.out.println("Program sa ukončuje...");
                     break;
 
                 default:
-                    System.out.println("Neplatna volba, skuste to znova.");
+                    System.out.println("Neplatná voľba, skúste to znova.");
             }
             }
             sc.close();

@@ -311,5 +311,60 @@ public class DatabazaZamestnancov {
             System.err.println("Chyba pri zpise do súboru: " + e.getMessage());
         }
     }
+
+        public void nacitajZamestnancaZoSuboru(String menoSuboru)
+        {
+        File subor = new File(menoSuboru);
+        if (!subor.exists())
+        {
+            System.out.println("Súbor " + menoSuboru + " neexistuje.");
+            return;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(subor)))
+        {
+            String riadok = reader.readLine();
+            if (riadok != null)
+            {
+                String[] casti = riadok.split(";");
+
+                if (casti.length == 5)
+                {
+                    String typ = casti[0];
+                    int id = Integer.parseInt(casti[1]);
+                    String meno = casti[2];
+                    String priezvisko = casti[3];
+                    int rok = Integer.parseInt(casti[4]);
+
+                    if (najdiPodlaID(id) != null)
+                    {
+                        System.out.println("Zamestnanec s ID " + id + " už v databáze existuje.");
+                        return;
+                    }
+
+                    Zamestnanec novy;
+                    if (typ.equals("ANALYTIK"))
+                    {
+                        novy = new DatovyAnalytik(id, meno, priezvisko, rok);
+                    } 
+                    else
+                    {
+                        novy = new BezpecnostnySpecialista(id, meno, priezvisko, rok);
+                    }
+                    pridajNacitanehoZamestnanca(novy);
+                    System.out.println("Zamestnanec načítaný zo súboru (ID: " + id + ").");
+                    automatickeUlozenie();
+                } 
+                else
+                {
+                    System.out.println("Neplatný formát dát v súbore.");
+                }
+            }
+        } 
+        catch (Exception e)
+        {
+            System.err.println("Chyba pri načítavaní zo súboru: " + e.getMessage());
+        }
+    }
 }
 
