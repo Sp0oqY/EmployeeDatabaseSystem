@@ -1,20 +1,18 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
+import java.sql.*;
 
-public class DatabazaZamestnancov {
-
+public class DatabazaZamestnancov
+{
     private List <Zamestnanec> zamestnanci = new ArrayList<>();
     private int dalsieID = 1;
 
-    public void pridajZamestnanca(String typ, String meno, String priezvisko, int rokNarodenia){
-        
+    private static final String DB_URL = "jdbc:h2:./databaza_zamestnancov";
+    private static final String DB_USER = "sa";
+    private static final String DB_PASS = "";
+
+    public void pridajZamestnanca(String typ, String meno, String priezvisko, int rokNarodenia)
+    {
         Zamestnanec novyZamestnanec;
         int prideleneID = dalsieID++;
 
@@ -312,58 +310,222 @@ public class DatabazaZamestnancov {
         }
     }
 
-        public void nacitajZamestnancaZoSuboru(String menoSuboru)
-        {
-        File subor = new File(menoSuboru);
-        if (!subor.exists())
-        {
-            System.out.println("Súbor " + menoSuboru + " neexistuje.");
-            return;
-        }
+    public void nacitajZamestnancaZoSuboru(String menoSuboru)
+    {
+    File subor = new File(menoSuboru);
+    if (!subor.exists())
+    {
+        System.out.println("Súbor " + menoSuboru + " neexistuje.");
+        return;
+    }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(subor)))
+    try (BufferedReader reader = new BufferedReader(new FileReader(subor)))
+    {
+        String riadok = reader.readLine();
+        if (riadok != null)
         {
-            String riadok = reader.readLine();
-            if (riadok != null)
+            String[] casti = riadok.split(";");
+
+            if (casti.length == 5)
             {
-                String[] casti = riadok.split(";");
+                String typ = casti[0];
+                int id = Integer.parseInt(casti[1]);
+                String meno = casti[2];
+                String priezvisko = casti[3];
+                int rok = Integer.parseInt(casti[4]);
 
-                if (casti.length == 5)
+                if (najdiPodlaID(id) != null)
                 {
-                    String typ = casti[0];
-                    int id = Integer.parseInt(casti[1]);
-                    String meno = casti[2];
-                    String priezvisko = casti[3];
-                    int rok = Integer.parseInt(casti[4]);
+                    System.out.println("Zamestnanec s ID " + id + " už v databáze existuje.");
+                    return;
+                }
 
-                    if (najdiPodlaID(id) != null)
-                    {
-                        System.out.println("Zamestnanec s ID " + id + " už v databáze existuje.");
-                        return;
-                    }
-
-                    Zamestnanec novy;
-                    if (typ.equals("ANALYTIK"))
-                    {
-                        novy = new DatovyAnalytik(id, meno, priezvisko, rok);
-                    } 
-                    else
-                    {
-                        novy = new BezpecnostnySpecialista(id, meno, priezvisko, rok);
-                    }
-                    pridajNacitanehoZamestnanca(novy);
-                    System.out.println("Zamestnanec načítaný zo súboru (ID: " + id + ").");
-                    automatickeUlozenie();
+                Zamestnanec novy;
+                if (typ.equals("ANALYTIK"))
+                {
+                    novy = new DatovyAnalytik(id, meno, priezvisko, rok);
                 } 
                 else
                 {
-                    System.out.println("Neplatný formát dát v súbore.");
+                    novy = new BezpecnostnySpecialista(id, meno, priezvisko, rok);
+                }
+                pridajNacitanehoZamestnanca(novy);
+                System.out.println("Zamestnanec načítaný zo súboru (ID: " + id + ").");
+                automatickeUlozenie();
+            } 
+            else
+            {
+                System.out.println("Neplatný formát dát v súbore.");
+            }
+        }
+    } 
+    catch (Exception e)
+    {
+        System.err.println("Chyba pri načítavaní zo súboru: " + e.getMessage());
+    }
+}
+    private Connection getSqlConnection() throws SQLException 
+    {
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+    }
+
+     public void ulozDoSQL()
+     {
+        String dropSpolupraca = "DROP TABLE IF EXISTS spolupracovnici";
+        String dropZamestnanci = "DROP TABLE IF EXISTS zamestnanci";
+        
+        String createZamestnanci = "CREATE TABLE zamestnanci (" +
+                "id INT PRIMARY KEY, " +
+                "typ VARCHAR(20), " +
+                "meno VARCHAR(50), " +
+                "priezvisko VARCHAR(50), " +
+                "rok_narodenia INT)";
+        
+        String createSpolupraca = "CREATE TABLE spolupracovnici (" +
+                "zamestnanec_id INT, " +
+                "kolega_id INT, " +
+                "uroven VARCHAR(20), " +
+                "FOREIGN KEY (zamestnanec_id) REFERENCES zamestnanci(id), " +
+                "FOREIGN KEY (kolega_id) REFERENCES zamestnanci(id))";
+
+        String insertZamestnanec = "INSERT INTO zamestnanci (id, typ, meno, priezvisko, rok_narodenia) VALUES (?, ?, ?, ?, ?)";
+        String insertSpolupraca = "INSERT INTO spolupracovnici (zamestnanec_id, kolega_id, uroven) VALUES (?, ?, ?)";
+
+        try (Connection conn = getSqlConnection();
+             Statement stmt = conn.createStatement())
+        {
+            conn.setAutoCommit(false);
+
+            stmt.execute(dropSpolupraca);
+            stmt.execute(dropZamestnanci);
+            stmt.execute(createZamestnanci);
+            stmt.execute(createSpolupraca);
+
+            try (PreparedStatement psZ = conn.prepareStatement(insertZamestnanec))
+            {
+                for (Zamestnanec z : zamestnanci)
+                {
+                    psZ.setInt(1, z.getId());
+                    psZ.setString(2, (z instanceof DatovyAnalytik ? "ANALYTIK" : "SPECIALISTA"));
+                    psZ.setString(3, z.getMeno());
+                    psZ.setString(4, z.getPriezvisko());
+                    psZ.setInt(5, z.getRokNarodenia());
+                    psZ.addBatch();
+                }
+
+                psZ.executeBatch();
+            }
+
+            try (PreparedStatement psS = conn.prepareStatement(insertSpolupraca))
+            {
+                Set<String> ulozeneVazby = new HashSet<>();
+                for (Zamestnanec z : zamestnanci)
+                {
+                    for (Spolupraca s : z.getSpolupracovnici())
+                    {
+                        int id1 = z.getId();
+                        int id2 = s.getKolega().getId();
+
+                        String klucVazby = (id1 < id2) ? id1 + "-" + id2 : id2 + "-" + id1;
+                        
+                        if (!ulozeneVazby.contains(klucVazby)) {
+                            psS.setInt(1, id1);
+                            psS.setInt(2, id2);
+                            psS.setString(3, s.getUroven().toString());
+                            psS.addBatch();
+                            ulozeneVazby.add(klucVazby);
+                        }
+                    }
+                }
+                psS.executeBatch();
+            }
+
+            conn.commit();
+            System.out.println("Dáta boli úspešne zálohované do SQL databázy.");
+
+        }
+        catch (SQLException e)
+        {
+            System.err.println("Chyba pri ukladaní do SQL databázy: " + e.getMessage());
+        }
+    }
+
+    public boolean nacitajZSQL()
+    {
+        String selectZamestnanci = "SELECT * FROM zamestnanci";
+        String selectSpolupraca = "SELECT * FROM spolupracovnici";
+        
+        List<Zamestnanec> nacitaniZamestnanci = new ArrayList<>();
+        int maxId = 0;
+
+        try (Connection conn = getSqlConnection();
+             Statement stmtZ = conn.createStatement();
+             ResultSet rsZ = stmtZ.executeQuery(selectZamestnanci))
+        {
+            while (rsZ.next())
+            {
+                int id = rsZ.getInt("id");
+                String typ = rsZ.getString("typ");
+                String meno = rsZ.getString("meno");
+                String priezvisko = rsZ.getString("priezvisko");
+                int rok = rsZ.getInt("rok_narodenia");
+
+                Zamestnanec z;
+                if ("ANALYTIK".equals(typ))
+                {
+                    z = new DatovyAnalytik(id, meno, priezvisko, rok);
+                }
+                else
+                {
+                    z = new BezpecnostnySpecialista(id, meno, priezvisko, rok);
+                }
+                nacitaniZamestnanci.add(z);
+                if (id > maxId) maxId = id;
+            }
+
+            if (nacitaniZamestnanci.isEmpty())
+            {
+                return false;
+            }
+
+            this.zamestnanci = nacitaniZamestnanci;
+
+            try (Statement stmtS = conn.createStatement();
+                 ResultSet rsS = stmtS.executeQuery(selectSpolupraca))
+            {
+                
+                while (rsS.next())
+                {
+                    int id1 = rsS.getInt("zamestnanec_id");
+                    int id2 = rsS.getInt("kolega_id");
+                    String urovenStr = rsS.getString("uroven");
+                    Uroven uroven = Uroven.valueOf(urovenStr);
+
+                    Zamestnanec z1 = najdiPodlaID(id1);
+                    Zamestnanec z2 = najdiPodlaID(id2);
+
+                    if (z1 != null && z2 != null)
+                    {
+                        z1.getSpolupracovnici().add(new Spolupraca(z2, uroven));
+                        z2.getSpolupracovnici().add(new Spolupraca(z1, uroven));
+                    }
                 }
             }
+
+            this.dalsieID = maxId + 1;
+            automatickeUlozenie();
+            System.out.println("Úspešne načítaných " + zamestnanci.size() + " zamestnancov z SQL databázy.");
+            return true;
+
+        } 
+        catch (SQLException e)
+        {
+            return false;
         } 
         catch (Exception e)
         {
-            System.err.println("Chyba pri načítavaní zo súboru: " + e.getMessage());
+            System.err.println("Chyba pri rekonštrukcii dát z SQL: " + e.getMessage());
+            return false;
         }
     }
 }
