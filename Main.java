@@ -1,10 +1,12 @@
 import java.io.IOException;
 import java.util.*;
 
-public class Main {
-    public static void main(String[] args) throws IOException{
-
+public class Main 
+{
+    public static void main(String[] args) throws IOException
+    {
         DatabazaZamestnancov db = new DatabazaZamestnancov();
+
         db.nacitajData();
 
         Scanner sc = new Scanner(System.in);
@@ -12,7 +14,8 @@ public class Main {
 
         System.out.println("----DATABAZOVY SYSTEM ZAMESTNANCOV----");
 
-        while(bezi){
+        while(bezi)
+            {
 
             System.out.println("\nMENU:");
             System.out.println("a) Pridat zamestnanca (Analytik/Specialista)");
@@ -23,12 +26,14 @@ public class Main {
             System.out.println("f) Vypis zoznamu abecedne");
             System.out.println("g) Statistika");
             System.out.println("h) Pocet zamestnancov v skupinach");
+            System.out.println("i) Uložiť zamestnanca do textového súboru");
             System.out.println("x) Ukoncit");
             System.out.print("Vasa volba: ");
 
             String volba = sc.nextLine().toLowerCase();
 
-            switch(volba){
+            switch(volba)
+            {
                 case "a" :
                 System.out.print("Typ (analytik/specialista): ");
                 String typ = sc.nextLine();
@@ -88,6 +93,14 @@ public class Main {
 
                 case "h":
                     db.vypisPocetZamestnancov();
+                    break;
+
+                case "i":
+                    System.out.print("Zadajte ID zamestnanca na uloženie: ");
+                    int idNaUlozenie = Integer.parseInt(sc.nextLine());
+                    System.out.print("Zadajte názov súboru (v tvare xx.txt) ");
+                    String menoSuboruUlozit = sc.nextLine();
+                    db.ulozZamestnancaDoSuboru(idNaUlozenie, menoSuboruUlozit);
                     break;
 
                 case "x":

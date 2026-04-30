@@ -17,9 +17,13 @@ public class DatabazaZamestnancov {
         
         Zamestnanec novyZamestnanec;
         int prideleneID = dalsieID++;
-        if(typ.equalsIgnoreCase("analytik")){
+
+        if(typ.equalsIgnoreCase("analytik"))
+        {
             novyZamestnanec = new DatovyAnalytik(prideleneID, meno, priezvisko, rokNarodenia);        
-        }else{
+        }
+        else
+        {
             novyZamestnanec = new BezpecnostnySpecialista(prideleneID, meno, priezvisko, rokNarodenia);
         }
 
@@ -28,41 +32,49 @@ public class DatabazaZamestnancov {
         automatickeUlozenie();
     }
 
-    public Zamestnanec najdiPodlaID(int id){
-        for(Zamestnanec z : zamestnanci){
-            if(z.getId() == id){
+    public Zamestnanec najdiPodlaID(int id)
+    {
+        for(Zamestnanec z : zamestnanci)
+        {
+            if(z.getId() == id)
+            {
                 return z;
             }
         }
         return null;
     }
 
-    public void pridajSpolupracu(int idZamestnanca, int idKolega, Uroven uroven){
-
+    public void pridajSpolupracu(int idZamestnanca, int idKolega, Uroven uroven)
+    {
         Zamestnanec z1 = najdiPodlaID(idZamestnanca);
         Zamestnanec z2 = najdiPodlaID(idKolega);
 
-        if(z1 != null && z2 != null){
+        if(z1 != null && z2 != null)
+        {
             z1.pridajSpolupracu(z2, uroven);
             z2.pridajSpolupracu(z1, uroven);
             System.out.println("Spolupraca nastavena.");
-        }else{
+        }
+        else
+        {
             System.out.println("Jeden zo zamestnancov nebol najdeny.");
         }
 
         automatickeUlozenie();
     }
 
-    public void odoberZamestnanca(int id){
-
+    public void odoberZamestnanca(int id)
+    {
         Zamestnanec naOdstranenie = najdiPodlaID(id);
 
-        if(naOdstranenie == null){
+        if(naOdstranenie == null)
+        {
             System.out.println("Zamestnanec neexistuje");
             return;
         }
 
-        for(Zamestnanec z : zamestnanci){
+        for(Zamestnanec z : zamestnanci)
+        {
             z.getSpolupracovnici().removeIf(s -> s.getKolega().getId() == id);
         }
 
@@ -72,11 +84,12 @@ public class DatabazaZamestnancov {
         automatickeUlozenie();
     }
 
-    public void vypisZamestnanca(int id) {
-
+    public void vypisZamestnanca(int id)
+    {
         Zamestnanec z = najdiPodlaID(id);
 
-        if (z != null) {
+        if (z != null)
+        {
             System.out.println("---- INFORMACIE O ZAMESTNANCOVI ----");
             System.out.println("ID: " + z.getId());
             System.out.println("Meno: " + z.getMeno() + " " + z.getPriezvisko());
@@ -84,24 +97,31 @@ public class DatabazaZamestnancov {
 
             int pocetKolegov = z.getSpolupracovnici().size();
             System.out.println("Pocet spolupracovnikov: " + pocetKolegov);
-        } else {
+        } 
+        else 
+        {
             System.out.println("Zamestnanec s ID " + id + " nebol najdeny.");
         }
     }
 
-    public void spustitDovednost(int id) {
+    public void spustitDovednost(int id)
+    {
         Zamestnanec z = najdiPodlaID(id);
-        if (z != null) {
+        if (z != null)
+        {
             System.out.println("--- SPUSTAM SPECIALNU DOVEDNOST ---");
             z.vykonajAnalyzu(); 
-        } else {
+        } 
+        else 
+        {
             System.out.println("Zamestnanec nenajdeny.");
         }
     }
 
-    public void vypisAbecedne() {
-        
-        if (zamestnanci.isEmpty()) {
+    public void vypisAbecedne()
+    {
+        if (zamestnanci.isEmpty())
+        {
             System.out.println("Databaza je prazdna.");
             return;
         }
@@ -113,22 +133,28 @@ public class DatabazaZamestnancov {
         System.out.println("---- ABECEDNY VYPIS PODLA ABECEDY ----");
     
         System.out.println("\n[ DATOVI ANALYTICI ]");
-        for (Zamestnanec z : zoradenyZoznam) {
-            if (z instanceof DatovyAnalytik) {
+        for (Zamestnanec z : zoradenyZoznam)
+        {
+            if (z instanceof DatovyAnalytik)
+            {
                 System.out.println(z.getPriezvisko() + " " + z.getMeno() + " (ID: " + z.getId() + ")");
             }
         }
 
         System.out.println("\n[ BEZPECNOSTNI ANALYTICI ]");
-        for (Zamestnanec z : zoradenyZoznam) {
-            if (z instanceof BezpecnostnySpecialista) {
+        for (Zamestnanec z : zoradenyZoznam)
+        {
+            if (z instanceof BezpecnostnySpecialista)
+            {
                 System.out.println(z.getPriezvisko() + " " + z.getMeno() + " (ID: " + z.getId() + ")");
             }
         }
     }
 
-    public void vypisStatistiku(){
-        if(zamestnanci.isEmpty()){
+    public void vypisStatistiku()
+    {
+        if(zamestnanci.isEmpty())
+        {
             System.out.println("Databaza je prazdna a nie je mozne spravit statistiku.");
             return;
         }
@@ -140,19 +166,26 @@ public class DatabazaZamestnancov {
         int priemerna = 0;
         int dobra = 0;
 
-        for (Zamestnanec z : zamestnanci){
+        for (Zamestnanec z : zamestnanci)
+        {
             int pocetVazieb = z.getSpolupracovnici().size();
             if(pocetVazieb > maxVazieb){
                 maxVazieb = pocetVazieb;
                 najviacVazieb = z;
             }
         
-            for(Spolupraca s : z.getSpolupracovnici()){
-                if(s.getUroven() == Uroven.Zla) {
+            for(Spolupraca s : z.getSpolupracovnici())
+            {
+                if(s.getUroven() == Uroven.Zla) 
+                {
                     zla++;
-                }else if(s.getUroven() == Uroven.Priemerna) {
+                }
+                else if(s.getUroven() == Uroven.Priemerna)
+                {
                     priemerna++;
-                }else if(s.getUroven() == Uroven.Dobra) {
+                }
+                else if(s.getUroven() == Uroven.Dobra)
+                {
                     dobra++;
                 }
             }
@@ -160,28 +193,40 @@ public class DatabazaZamestnancov {
 
         System.out.println("---- CELKOVE STATISTIKY ----");
 
-        if(najviacVazieb != null){
+        if(najviacVazieb != null)
+        {
             System.out.println("Zamestnanec s najviac vazbammi: " + najviacVazieb.getMeno() + " " + najviacVazieb.getPriezvisko() + "(pocet: " + maxVazieb + ")");
         }
 
         System.out.print("Prevazujuca kvalita spoluprace: ");
-        if(zla >= priemerna && zla >= dobra){
+
+        if(zla >= priemerna && zla >= dobra)
+        {
             System.out.println("zla");
-        }else if(priemerna >= zla && priemerna >= dobra){
+        }
+        else if(priemerna >= zla && priemerna >= dobra)
+        {
             System.out.println("priemerna");
-        }else if(dobra >= priemerna && dobra >= zla){
+        }
+        else if(dobra >= priemerna && dobra >= zla)
+        {
             System.out.println("dobra");
         }
     }
 
-    public void vypisPocetZamestnancov(){
+    public void vypisPocetZamestnancov()
+    {
         int pocetAnalytikov = 0;
         int pocetSpecialistov = 0;
 
-        for(Zamestnanec z : zamestnanci){
-            if(z instanceof DatovyAnalytik){
+        for(Zamestnanec z : zamestnanci)
+        {
+            if(z instanceof DatovyAnalytik)
+            {
                 pocetAnalytikov++;
-            }else if(z instanceof BezpecnostnySpecialista){
+            }
+            else if(z instanceof BezpecnostnySpecialista)
+            {
                 pocetSpecialistov++;
             }
         }
@@ -192,47 +237,78 @@ public class DatabazaZamestnancov {
         System.out.println("Celkovy pocet: " + zamestnanci.size());
     }
 
-    private void automatickeUlozenie() {
-
-        try (PrintWriter writer = new PrintWriter(new FileWriter("databaza.txt"))) {
+    private void automatickeUlozenie()
+    {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("databaza.txt")))
+        {
             writer.println("---- AKTUALNY STAV DATABAZE ----");
 
-            for (Zamestnanec z : zamestnanci) {
+            for (Zamestnanec z : zamestnanci)
+            {
                 writer.println("ID: " + z.getId() + " | " + z.getMeno() + " " + z.getPriezvisko());
                 writer.println("Typ: " + (z instanceof DatovyAnalytik ? "Analytik" : "Specialista"));
                 writer.println("Pocet kolegov: " + z.getSpolupracovnici().size());
                 writer.println("--------------------------------------");
             }
 
-        } catch (IOException e) {
+        } 
+        catch (IOException e)
+        {
 
         }
     }
 
-    public void ulozData() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.bin"))) {
+    public void ulozData()
+    {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.bin")))
+        {
             
             oos.writeObject(zamestnanci);
             oos.writeInt(dalsieID);
 
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
 
         }
     }
 
-    public void nacitajData() {
+    public void nacitajData()
+    {
         File subor = new File("data.bin");
         if (!subor.exists()) 
         {
             return;
         }
 
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(subor))) {
-            
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(subor)))
+        {
             zamestnanci = (List<Zamestnanec>) ois.readObject();
             dalsieID = ois.readInt();
             
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
+        }
+    }
+
+    public void ulozZamestnancaDoSuboru(int id, String menoSuboru)
+    {
+        Zamestnanec z = najdiPodlaID(id);
+        if(z == null)
+        {
+            System.out.println("Zamestnanec s ID: " + id " neexistuje.");
+            return;
+        }
+
+        try(PrintWriter writer = new PrintWriter(new FileWriter(menoSuboru)))
+        {
+            String typ = (z instanceof DatovyAnalytik) ? "ANALYTIK" : "SPECIALISTA";
+            writer.println(typ + "; " + z.getId() + "; " + z.getMeno() + "; " + z.getPriezvisko() + "; " + z,getRokNarodenia());
+            System.out.println("Zamestnanec uložený do súboru: " + menoSuboru);
+        }
+        catch(IOException)
+        {
+            System.err.println("Chyba pri zpise do súboru: " + e.getMessage());
         }
     }
 }
