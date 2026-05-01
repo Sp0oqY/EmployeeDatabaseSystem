@@ -1,5 +1,5 @@
-public class BezpecnostnySpecialista extends Zamestnanec{
-
+public class BezpecnostnySpecialista extends Zamestnanec
+{
     public BezpecnostnySpecialista(int id, String meno, String priezvisko, int rokNarodenia){
         super(id, meno, priezvisko, rokNarodenia);
     }
@@ -16,15 +16,13 @@ public class BezpecnostnySpecialista extends Zamestnanec{
 
         double celkoveSkore = 0;
 
-        for(Spolupraca s : spolupracovnici){
-            if(s.getUroven() == Uroven.Zla){
-                celkoveSkore += 3; 
-            }
-            else if(s.getUroven() == Uroven.Priemerna){
-                celkoveSkore += 2; 
-            }
-            else{
-                celkoveSkore += 1;
+        for(Spolupraca s : spolupracovnici)
+        {
+            switch (s.getUroven()) 
+            {
+                case Zla -> celkoveSkore += 3;
+                case Priemerna -> celkoveSkore += 2;
+                default -> celkoveSkore += 1;
             }
         }
 

@@ -1,7 +1,8 @@
-public class DatovyAnalytik extends Zamestnanec{
-    
-    public DatovyAnalytik(int id, String meno, String priezvisko, int rokNarodenia){
-            super(id, meno, priezvisko, rokNarodenia);
+public class DatovyAnalytik extends Zamestnanec
+{
+    public DatovyAnalytik(int id, String meno, String priezvisko, int rokNarodenia)
+    {
+        super(id, meno, priezvisko, rokNarodenia);
     }
 
     @Override 

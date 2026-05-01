@@ -1,7 +1,7 @@
-public class Spolupraca implements java.io.Serializable{
-
-    private Zamestnanec kolega;
-    private Uroven uroven;
+public class Spolupraca implements java.io.Serializable
+{
+    final private Zamestnanec kolega;
+    final private Uroven uroven;
 
     public Spolupraca(Zamestnanec kolega, Uroven uroven){
         this.kolega = kolega;

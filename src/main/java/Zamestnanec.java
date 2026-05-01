@@ -1,10 +1,12 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class Zamestnanec implements java.io.Serializable{
-    private int id;
+public abstract class Zamestnanec implements java.io.Serializable
+{
+    final private int id;
     private String meno;
     private String priezvisko;
-    private int rokNarodenia;
+    final private int rokNarodenia;
 
     protected List <Spolupraca> spolupracovnici = new ArrayList<>();
 
@@ -50,6 +52,5 @@ public abstract class Zamestnanec implements java.io.Serializable{
         System.out.println("Chyba: Neplatný objekt spolupracovníka.");
     }
 }
-
     public abstract void vykonajAnalyzu();
 }
