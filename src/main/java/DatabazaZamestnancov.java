@@ -552,5 +552,33 @@ public class DatabazaZamestnancov
             return false;
         }
     }
+
+    public void vypisZSQL() {
+
+    String url = "jdbc:h2:./databaza_zamestnancov";
+    String meno = "sa";
+    String heslo = "";
+
+    try (Connection conn = DriverManager.getConnection(url, meno, heslo);
+         Statement stmt = conn.createStatement();
+
+        ResultSet rs = stmt.executeQuery("SELECT * FROM ZAMESTNANCI"))
+        {
+            System.out.println("--- DÁTA Z SQL DATABÁZY ---");
+            
+            while (rs.next())
+            {
+                int id = rs.getInt("id");
+                String krstneMeno = rs.getString("meno");
+                String priezvisko = rs.getString("priezvisko");
+                
+                System.out.println("ID: " + id + ", Meno: " + krstneMeno + " " + priezvisko);
+            }
+        }
+    catch (Exception e)
+    {
+        System.out.println("Chyba pri čítaní z databázy: " + e.getMessage());
+    }
+}
 }
 

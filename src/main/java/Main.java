@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.util.*;
+import java.util.Scanner;
 
 public class Main 
 {
@@ -34,6 +34,7 @@ public class Main
             System.out.println("h) Počet zamestnancov v skupinách");
             System.out.println("i) Uložiť zamestnanca do textového súboru");
             System.out.println("j) Načítať zamestnanca z textového súboru");
+            System.out.println("k) Výpis dát z SQL databázy");
             System.out.println("x) Ukončiť");
             System.out.print("Vaša volba: ");
 
@@ -123,10 +124,14 @@ public class Main
                         String menoSuboruNacitat = sc.nextLine();
                         db.nacitajZamestnancaZoSuboru(menoSuboruNacitat);
                         break;
+                    
+                    case "k":
+                        db.vypisZSQL();
+                        break;
 
                     case "x":
                         db.ulozData();
-                        System.out.println("Ukladám dáta do SQL databázy.");
+                        System.out.println("Ukladám dáta do SQL databázy...");
                         db.ulozDoSQL();
                         bezi = false;
                         System.out.println("Program sa ukončuje...");
