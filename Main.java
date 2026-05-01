@@ -33,7 +33,7 @@ public class Main
             System.out.println("g) Štatistika");
             System.out.println("h) Počet zamestnancov v skupinách");
             System.out.println("i) Uložiť zamestnanca do textového súboru");
-            System.out.println("i) Načítať zamestnanca z textového súboru");
+            System.out.println("j) Načítať zamestnanca z textového súboru");
             System.out.println("x) Ukončiť");
             System.out.print("Vaša volba: ");
 
@@ -127,7 +127,7 @@ public class Main
                     case "x":
                         db.ulozData();
                         System.out.println("Ukladám dáta do SQL databázy.");
-                        db.ulozSQL();
+                        db.ulozDoSQL();
                         bezi = false;
                         System.out.println("Program sa ukončuje...");
                         break;

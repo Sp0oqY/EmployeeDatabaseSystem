@@ -1,5 +1,21 @@
 ---- AKTUALNY STAV DATABAZE ----
 ID: 4 | viktoria pavolova
 Typ: Analytik
-Pocet kolegov: 0
+Pocet kolegov: 2
+--------------------------------------
+ID: 5 | Miro Kastier
+Typ: Analytik
+Pocet kolegov: 2
+--------------------------------------
+ID: 6 | Adam Pachnik
+Typ: Specialista
+Pocet kolegov: 1
+--------------------------------------
+ID: 7 | Martin Micko
+Typ: Analytik
+Pocet kolegov: 2
+--------------------------------------
+ID: 8 | Terezia Polkovicova
+Typ: Specialista
+Pocet kolegov: 1
 --------------------------------------

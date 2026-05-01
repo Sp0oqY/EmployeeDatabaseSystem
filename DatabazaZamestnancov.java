@@ -30,6 +30,18 @@ public class DatabazaZamestnancov
         automatickeUlozenie();
     }
 
+    private void pridajNacitanehoZamestnanca(Zamestnanec z)
+    {
+        if (z != null)
+        {
+            zamestnanci.add(z);
+            if (z.getId() >= dalsieID)
+            {
+                dalsieID = z.getId() + 1;
+            }
+        }
+    }
+
     public Zamestnanec najdiPodlaID(int id)
     {
         for(Zamestnanec z : zamestnanci)
@@ -294,17 +306,17 @@ public class DatabazaZamestnancov
         Zamestnanec z = najdiPodlaID(id);
         if(z == null)
         {
-            System.out.println("Zamestnanec s ID: " + id " neexistuje.");
+            System.out.println("Zamestnanec s ID: " + id + " neexistuje.");
             return;
         }
 
         try(PrintWriter writer = new PrintWriter(new FileWriter(menoSuboru)))
         {
             String typ = (z instanceof DatovyAnalytik) ? "ANALYTIK" : "SPECIALISTA";
-            writer.println(typ + "; " + z.getId() + "; " + z.getMeno() + "; " + z.getPriezvisko() + "; " + z,getRokNarodenia());
+            writer.println(typ + "; " + z.getId() + "; " + z.getMeno() + "; " + z.getPriezvisko() + "; " + z.getRokNarodenia());
             System.out.println("Zamestnanec uložený do súboru: " + menoSuboru);
         }
-        catch(IOException)
+        catch(IOException e)
         {
             System.err.println("Chyba pri zpise do súboru: " + e.getMessage());
         }
@@ -328,11 +340,11 @@ public class DatabazaZamestnancov
 
             if (casti.length == 5)
             {
-                String typ = casti[0];
-                int id = Integer.parseInt(casti[1]);
-                String meno = casti[2];
-                String priezvisko = casti[3];
-                int rok = Integer.parseInt(casti[4]);
+                String typ = casti[0].trim();
+                int id = Integer.parseInt(casti[1].trim());
+                String meno = casti[2].trim();
+                String priezvisko = casti[3].trim();
+                int rok = Integer.parseInt(casti[4].trim());
 
                 if (najdiPodlaID(id) != null)
                 {
