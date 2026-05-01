@@ -1,1 +1,1 @@
-ANALYTIK; 5; Miro; Kastier; 2004
+SPECIALISTA; 6; Adam; Pachnik; 2004

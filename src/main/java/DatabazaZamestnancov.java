@@ -465,7 +465,7 @@ public class DatabazaZamestnancov
             }
 
             conn.commit();
-            System.out.println("Dáta boli úspešne zálohované do SQL databázy.");
+            System.out.println(Farby.ZELENA + "Dáta boli úspešne zálohované do SQL databázy." + Farby.RESET);
 
         }
         catch (SQLException e)
@@ -538,7 +538,7 @@ public class DatabazaZamestnancov
 
             this.dalsieID = maxId + 1;
             automatickeUlozenie();
-            System.out.println("Úspešne načítaných " + zamestnanci.size() + " zamestnancov z SQL databázy.");
+            System.out.println(Farby.ZELENA + "Úspešne načítaných " + zamestnanci.size() + " zamestnancov z SQL databázy." + Farby.RESET);
             return true;
 
         } 

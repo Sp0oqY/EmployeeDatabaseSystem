@@ -7,7 +7,7 @@ public class Main
     {
         DatabazaZamestnancov db = new DatabazaZamestnancov();
 
-        System.out.println("SQL databáza");
+        System.out.println("\n----SQL databáza----\n");
 
         if (!db.nacitajZSQL()) 
         {
@@ -18,7 +18,7 @@ public class Main
         Scanner sc = new Scanner(System.in);
         boolean bezi = true;
 
-        System.out.println("----DATABÁZOVY SYSTÉM ZAMESTNANCOV----");
+        System.out.println(Farby.AZUROVA + "\n----DATABÁZOVY SYSTÉM ZAMESTNANCOV----" + Farby.RESET);
 
         while(bezi)
         {
@@ -36,7 +36,7 @@ public class Main
             System.out.println("j) Načítať zamestnanca z textového súboru");
             System.out.println("k) Výpis dát z SQL databázy");
             System.out.println("x) Ukončiť");
-            System.out.print("Vaša volba: ");
+            System.out.print("\nVyberte si z možností: ");
 
             String volba = sc.nextLine().toLowerCase();
 
@@ -131,10 +131,10 @@ public class Main
 
                     case "x":
                         db.ulozData();
-                        System.out.println("Ukladám dáta do SQL databázy...");
+                        System.out.println("\nUkladám dáta do SQL databázy...\n");
                         db.ulozDoSQL();
                         bezi = false;
-                        System.out.println("Program sa ukončuje...");
+                        System.out.println(Farby.CERVENA + "\nProgram sa ukončuje..." + Farby.RESET);
                         break;
 
                     default:
