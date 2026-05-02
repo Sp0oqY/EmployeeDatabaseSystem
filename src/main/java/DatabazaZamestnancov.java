@@ -44,7 +44,7 @@ public class DatabazaZamestnancov
         }
 
         zamestnanci.add(novyZamestnanec);
-        System.out.println("Zamestnanec pridany s ID: " + prideleneID);
+        System.out.println(Farby.ZELENA + "\nZamestnanec bol pridaný s ID: " + prideleneID + Farby.RESET);
         automatickeUlozenie();
     }
 
@@ -81,11 +81,11 @@ public class DatabazaZamestnancov
         {
             z1.pridajSpolupracu(z2, uroven);
             z2.pridajSpolupracu(z1, uroven);
-            System.out.println("Spolupraca nastavena.");
+            System.out.println(Farby.ZELENA + "\nSpolupráca nastavená." + Farby.RESET);
         }
         else
         {
-            System.out.println("Jeden zo zamestnancov nebol najdeny.");
+            System.out.println(Farby.CERVENA + "\nJeden zo zamestnancov nebol nájdený." + Farby.RESET);
         }
 
         automatickeUlozenie();
@@ -97,7 +97,7 @@ public class DatabazaZamestnancov
 
         if(naOdstranenie == null)
         {
-            System.out.println("Zamestnanec neexistuje");
+            System.out.println(Farby.CERVENA + "\nZamestnanec neexistuje." + Farby.RESET);
             return;
         }
 
@@ -107,7 +107,7 @@ public class DatabazaZamestnancov
         }
 
         zamestnanci.remove(naOdstranenie);
-        System.out.println("Zamestnanec s ID: " + id + " bol odstraneny.");
+        System.out.println(Farby.CERVENA + "\nZamestnanec s ID: " + id + " bol odstránený." + Farby.RESET);
 
         automatickeUlozenie();
     }
@@ -118,17 +118,17 @@ public class DatabazaZamestnancov
 
         if (z != null)
         {
-            System.out.println("---- INFORMACIE O ZAMESTNANCOVI ----");
-            System.out.println("ID: " + z.getId());
+            System.out.println(Farby.AZUROVA + "\n---- INFORMÁCIE O ZAMESTNANCOVI ----" + Farby.RESET);
+            System.out.println("\nID: " + z.getId());
             System.out.println("Meno: " + z.getMeno() + " " + z.getPriezvisko());
             System.out.println("Rok narodenia: " + z.getRokNarodenia());
 
             int pocetKolegov = z.getSpolupracovnici().size();
-            System.out.println("Pocet spolupracovnikov: " + pocetKolegov);
+            System.out.println("Počet spolupracovníkov: " + pocetKolegov);
         } 
         else 
         {
-            System.out.println("Zamestnanec s ID " + id + " nebol najdeny.");
+            System.out.println(Farby.CERVENA + "Zamestnanec s ID " + id + " nebol nájdený." + Farby.RESET);
         }
     }
 
@@ -137,12 +137,12 @@ public class DatabazaZamestnancov
         Zamestnanec z = najdiPodlaID(id);
         if (z != null)
         {
-            System.out.println("--- SPUSTAM SPECIALNU DOVEDNOST ---");
+            System.out.println(Farby.AZUROVA + "\n---- SPÚŠŤAM ŠPECIÁLNU DOVEDNOSŤ ----" + Farby.RESET);
             z.vykonajAnalyzu(); 
         } 
         else 
         {
-            System.out.println("Zamestnanec nenajdeny.");
+            System.out.println(Farby.CERVENA + "\nZamestnanec nenájdený." + Farby.RESET);
         }
     }
 
@@ -150,7 +150,7 @@ public class DatabazaZamestnancov
     {
         if (zamestnanci.isEmpty())
         {
-            System.out.println("Databaza je prazdna.");
+            System.out.println(Farby.CERVENA + "\nDatabáza je prázdna." + Farby.RESET);
             return;
         }
     
@@ -158,9 +158,9 @@ public class DatabazaZamestnancov
     
         zoradenyZoznam.sort(Comparator.comparing(Zamestnanec::getPriezvisko, String.CASE_INSENSITIVE_ORDER));
     
-        System.out.println("---- ABECEDNY VYPIS PODLA ABECEDY ----");
+        System.out.println(Farby.AZUROVA + "\n---- ABECEDNÝ VÝPIS ZAMESTNANCOV ----" + Farby.RESET);
     
-        System.out.println("\n[ DATOVI ANALYTICI ]");
+        System.out.println(Farby.FIALOVA + "\n[ DÁTOVÍ ANALYTICI ]" + Farby.RESET);
         for (Zamestnanec z : zoradenyZoznam)
         {
             if (z instanceof DatovyAnalytik)
@@ -169,7 +169,7 @@ public class DatabazaZamestnancov
             }
         }
 
-        System.out.println("\n[ BEZPECNOSTNI ANALYTICI ]");
+        System.out.println(Farby.FIALOVA + "\n[ BEZPEČNOSTNÍ ANALYTICI ]" + Farby.RESET);
         for (Zamestnanec z : zoradenyZoznam)
         {
             if (z instanceof BezpecnostnySpecialista)
@@ -183,7 +183,7 @@ public class DatabazaZamestnancov
     {
         if(zamestnanci.isEmpty())
         {
-            System.out.println("Databaza je prazdna a nie je mozne spravit statistiku.");
+            System.out.println(Farby.CERVENA + "\nDatabaza je prázdna a nie je možné spraviť štatistiku." + Farby.RESET);
             return;
         }
 
@@ -213,26 +213,26 @@ public class DatabazaZamestnancov
             }
         }
 
-        System.out.println("---- CELKOVE STATISTIKY ----");
+        System.out.println(Farby.AZUROVA + "\n---- CELKOVÉ ŠTATISTIKY ----" + Farby.RESET);
 
         if(najviacVazieb != null)
         {
-            System.out.println("Zamestnanec s najviac vazbammi: " + najviacVazieb.getMeno() + " " + najviacVazieb.getPriezvisko() + "(pocet: " + maxVazieb + ")");
+            System.out.println("\nZamestnanec s najviac väzbammi: " + najviacVazieb.getMeno() + " " + najviacVazieb.getPriezvisko() + " (Počet: " + maxVazieb + ")");
         }
 
-        System.out.print("Prevazujuca kvalita spoluprace: ");
+        System.out.print("Prevažujuca kvalita spolupráce: ");
 
         if(zla >= priemerna && zla >= dobra)
         {
-            System.out.println("zla");
+            System.out.println(Farby.CERVENA + "Zlá" + Farby.RESET);
         }
         else if(priemerna >= zla && priemerna >= dobra)
         {
-            System.out.println("priemerna");
+            System.out.println(Farby.ZLTA + "Priemerná" + Farby.RESET);
         }
         else if(dobra >= priemerna && dobra >= zla)
         {
-            System.out.println("dobra");
+            System.out.println(Farby.ZELENA + "Dobrá" + Farby.RESET);
         }
     }
 
@@ -253,26 +253,25 @@ public class DatabazaZamestnancov
             }
         }
 
-        System.out.println("---- POCET ZAMESTNANCOV V SKUPINACH ----");
-        System.out.println("Datovi analytici: " + pocetAnalytikov);
-        System.out.println("Bezpecnostni specialisti: " + pocetSpecialistov);
-        System.out.println("Celkovy pocet: " + zamestnanci.size());
+        System.out.println(Farby.AZUROVA + "\n---- POČET ZAMESTNANCOV V SKUPINÁCH ----" + Farby.RESET);
+        System.out.println("\nDátoví analytici: " + pocetAnalytikov);
+        System.out.println("Bezpečnostní špecialisti: " + pocetSpecialistov);
+        System.out.println("Celkový počet: " + zamestnanci.size());
     }
 
     private void automatickeUlozenie()
     {
         try (PrintWriter writer = new PrintWriter(new FileWriter("databaza.txt")))
         {
-            writer.println("---- AKTUALNY STAV DATABAZE ----");
+            writer.println("---- AKTUÁLNY STAV DATABÁZY ----");
 
             for (Zamestnanec z : zamestnanci)
             {
+                writer.println("\n--------------------------------------\n");
                 writer.println("ID: " + z.getId() + " | " + z.getMeno() + " " + z.getPriezvisko());
-                writer.println("Typ: " + (z instanceof DatovyAnalytik ? "Analytik" : "Specialista"));
-                writer.println("Pocet kolegov: " + z.getSpolupracovnici().size());
-                writer.println("--------------------------------------");
+                writer.println("Typ: " + (z instanceof DatovyAnalytik ? "Analytik" : "Špecialista"));
+                writer.println("Počet kolegov: " + z.getSpolupracovnici().size());
             }
-
         } 
         catch (IOException e)
         {
@@ -318,19 +317,19 @@ public class DatabazaZamestnancov
         Zamestnanec z = najdiPodlaID(id);
         if(z == null)
         {
-            System.out.println("Zamestnanec s ID: " + id + " neexistuje.");
+            System.out.print(Farby.CERVENA + "\nZamestnanec s ID: " + id + " neexistuje." + Farby.RESET);
             return;
         }
 
         try(PrintWriter writer = new PrintWriter(new FileWriter(menoSuboru)))
         {
-            String typ = (z instanceof DatovyAnalytik) ? "ANALYTIK" : "SPECIALISTA";
-            writer.println(typ + "; " + z.getId() + "; " + z.getMeno() + "; " + z.getPriezvisko() + "; " + z.getRokNarodenia());
-            System.out.println("Zamestnanec uložený do súboru: " + menoSuboru);
+            String typ = (z instanceof DatovyAnalytik) ? "ANALYTIK" : "ŠPECIALISTA";
+            writer.println(z.getId() + "; " + z.getMeno() + "; " + z.getPriezvisko() + "; " + z.getRokNarodenia() + "; " + typ);
+            System.out.println(Farby.ZELENA + "\nZamestnanec uložený do súboru: " + menoSuboru);
         }
         catch(IOException e)
         {
-            System.err.println("Chyba pri zpise do súboru: " + e.getMessage());
+            System.err.println(Farby.CERVENA + "\nChyba pri zpise do súboru: " + e.getMessage() + Farby.RESET);
         }
     }
 
@@ -339,7 +338,7 @@ public class DatabazaZamestnancov
     File subor = new File(menoSuboru);
     if (!subor.exists())
     {
-        System.out.println("Súbor " + menoSuboru + " neexistuje.");
+        System.out.println(Farby.CERVENA + "\nSúbor " + menoSuboru + " neexistuje." + Farby.RESET);
         return;
     }
 
@@ -352,15 +351,15 @@ public class DatabazaZamestnancov
 
             if (casti.length == 5)
             {
-                String typ = casti[0].trim();
-                int id = Integer.parseInt(casti[1].trim());
-                String meno = casti[2].trim();
-                String priezvisko = casti[3].trim();
-                int rok = Integer.parseInt(casti[4].trim());
+                int id = Integer.parseInt(casti[0].trim());
+                String meno = casti[1].trim();
+                String priezvisko = casti[2].trim();
+                int rok = Integer.parseInt(casti[3].trim());
+                String typ = casti[4].trim();
 
                 if (najdiPodlaID(id) != null)
                 {
-                    System.out.println("Zamestnanec s ID " + id + " už v databáze existuje.");
+                    System.out.println(Farby.CERVENA + "\nZamestnanec s ID " + id + " už v databáze existuje." + Farby.RESET);
                     return;
                 }
 
@@ -374,18 +373,18 @@ public class DatabazaZamestnancov
                     novy = new BezpecnostnySpecialista(id, meno, priezvisko, rok);
                 }
                 pridajNacitanehoZamestnanca(novy);
-                System.out.println("Zamestnanec načítaný zo súboru (ID: " + id + ").");
+                System.out.println(Farby.ZELENA + "\nZamestnanec načítaný zo súboru (ID: " + id + ")." + Farby.RESET);
                 automatickeUlozenie();
             } 
             else
             {
-                System.out.println("Neplatný formát dát v súbore.");
+                System.out.println(Farby.CERVENA + "\nNeplatný formát dát v súbore." + Farby.RESET);
             }
         }
     } 
     catch (Exception e)
     {
-        System.err.println("Chyba pri načítavaní zo súboru: " + e.getMessage());
+        System.err.println(Farby.CERVENA + "\nChyba pri načítavaní zo súboru: " + e.getMessage() + Farby.RESET);
     }
 }
     private Connection getSqlConnection() throws SQLException 
@@ -470,7 +469,7 @@ public class DatabazaZamestnancov
         }
         catch (SQLException e)
         {
-            System.err.println("Chyba pri ukladaní do SQL databázy: " + e.getMessage());
+            System.err.println(Farby.CERVENA + "\nChyba pri ukladaní do SQL databázy: " + e.getMessage() + Farby.RESET);
         }
     }
 
@@ -538,7 +537,7 @@ public class DatabazaZamestnancov
 
             this.dalsieID = maxId + 1;
             automatickeUlozenie();
-            System.out.println(Farby.ZELENA + "Úspešne načítaných " + zamestnanci.size() + " zamestnancov z SQL databázy." + Farby.RESET);
+            System.out.println(Farby.ZELENA + "\n\nÚspešne načítaných " + zamestnanci.size() + " zamestnancov z SQL databázy." + Farby.RESET);
             return true;
 
         } 
@@ -548,7 +547,7 @@ public class DatabazaZamestnancov
         } 
         catch (Exception e)
         {
-            System.err.println("Chyba pri rekonštrukcii dát z SQL: " + e.getMessage());
+            System.err.println(Farby.CERVENA + "\nChyba pri rekonštrukcii dát z SQL: " + e.getMessage() + Farby.RESET);
             return false;
         }
     }
@@ -564,7 +563,7 @@ public class DatabazaZamestnancov
 
         ResultSet rs = stmt.executeQuery("SELECT * FROM ZAMESTNANCI"))
         {
-            System.out.println("--- DÁTA Z SQL DATABÁZY ---");
+            System.out.println(Farby.AZUROVA + "\n---- DÁTA Z SQL DATABÁZY ----" + Farby.RESET);
             
             while (rs.next())
             {
@@ -572,12 +571,12 @@ public class DatabazaZamestnancov
                 String krstneMeno = rs.getString("meno");
                 String priezvisko = rs.getString("priezvisko");
                 
-                System.out.println("ID: " + id + ", Meno: " + krstneMeno + " " + priezvisko);
+                System.out.println("\nID: " + id + " | Meno: " + krstneMeno + " " + priezvisko);
             }
         }
     catch (Exception e)
     {
-        System.out.println("Chyba pri čítaní z databázy: " + e.getMessage());
+        System.out.println(Farby.CERVENA + "\nChyba pri čítaní z databázy: " + e.getMessage() + Farby.RESET);
     }
 }
 }

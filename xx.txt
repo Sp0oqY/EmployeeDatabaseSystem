@@ -1,1 +1,1 @@
-SPECIALISTA; 6; Adam; Pachnik; 2004
+4; viktoria; pavolova; 2004; ANALYTIK

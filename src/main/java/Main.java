@@ -7,35 +7,30 @@ public class Main
     {
         DatabazaZamestnancov db = new DatabazaZamestnancov();
 
-        System.out.println("\n----SQL databáza----\n");
-
         if (!db.nacitajZSQL()) 
         {
-            System.out.println("SQL dáta sa nenašli, skúšam načítať data.bin...");
+            System.out.println(Farby.CERVENA + "\nSQL dáta sa nenašli, skúšam načítať data.bin..." + Farby.RESET);
             db.nacitajData();
         }
 
         Scanner sc = new Scanner(System.in);
         boolean bezi = true;
 
-        System.out.println(Farby.AZUROVA + "\n----DATABÁZOVY SYSTÉM ZAMESTNANCOV----" + Farby.RESET);
-
         while(bezi)
         {
-
-            System.out.println("\nMENU:");
-            System.out.println("a) Pridať zamestnanca (Analytik/Špecialista)");
-            System.out.println("b) Pridať spoluprácu (cez ID)");
+            System.out.println(Farby.MODRA + "\n---- DATABÁZOVY SYSTÉM ZAMESTNANCOV ----" + Farby.RESET);
+            System.out.println("\na) Pridať zamestnanca (Analytik/Špecialista)");
+            System.out.println("b) Pridať spoluprácu (podľa ID)");
             System.out.println("c) Odobrať zamestnanca (podľa ID)");
-            System.out.println("d) Výpis informácie o zamestnancovi (cez ID)");
+            System.out.println("d) Výpis informácie o zamestnancovi (podľa ID)");
             System.out.println("e) Spustiť dovednosť zamestnanca (Analýza/Riziko)");
-            System.out.println("f) Výpis zoznamu abecedne");
+            System.out.println("f) Abecedný výpis zoznamu");
             System.out.println("g) Štatistika");
             System.out.println("h) Počet zamestnancov v skupinách");
             System.out.println("i) Uložiť zamestnanca do textového súboru");
             System.out.println("j) Načítať zamestnanca z textového súboru");
             System.out.println("k) Výpis dát z SQL databázy");
-            System.out.println("x) Ukončiť");
+            System.out.println(Farby.CERVENA + "x) Ukončiť" + Farby.RESET);
             System.out.print("\nVyberte si z možností: ");
 
             String volba = sc.nextLine().toLowerCase();
@@ -45,7 +40,7 @@ public class Main
                 switch(volba)
                 {
                     case "a" :
-                    System.out.print("Typ (analytik/specialista): ");
+                    System.out.print("\nTyp (analytik/specialista): ");
                     String typ = sc.nextLine();
                     System.out.print("Meno: ");
                     String meno = sc.nextLine();
@@ -58,16 +53,16 @@ public class Main
                     break;
 
                     case "b":
-                    System.out.print("Zadajte ID zamestnanca: ");
+                    System.out.print("\nZadajte ID zamestnanca: ");
                     int id1 = Integer.parseInt(sc.nextLine());
                     System.out.print("Zadajte ID kolegu: ");
                     int id2 = Integer.parseInt(sc.nextLine());
-                    System.out.print("Úroveň (Zla/Priemerna/Dobra): ");
+                    System.out.print("Úroveň (" + Farby.CERVENA + "Zlá" + Farby.RESET + " / " + Farby.ZLTA + "Priemerná" + Farby.RESET + " / " + Farby.ZELENA +  "Dobrá" + Farby.RESET + "): ");
                     String urovenText = sc.nextLine();
 
                     if (!urovenText.isEmpty())
                     {
-                        urovenText = urovenText.substring(0, 1).toUpperCase() + urovenText.substring(1).toLowerCase();
+                        urovenText = urovenText.substring(0, 1).toUpperCase() + urovenText.substring(1).toLowerCase().trim();
                     }
 
                     try
@@ -77,24 +72,24 @@ public class Main
                     }
 
                     catch(IllegalArgumentException e){
-                        System.out.print("Neplatná úroveň. Použite: Zla, Priemerna alebo Dobra.");
+                        System.out.print(Farby.CERVENA + "\nNeplatná úroveň. Použite: Zla, Priemerna alebo Dobra." + Farby.RESET);
                     }
                     break;
 
                     case "c":
-                        System.out.print("Zadajte ID na vymazanie: ");
+                        System.out.print("\nZadajte ID na vymazanie: ");
                         int idNaZmazanie = Integer.parseInt(sc.nextLine());
                         db.odoberZamestnanca(idNaZmazanie);
                         break;
 
                     case "d":
-                        System.out.print("Zadajte ID zamestnanca pre vyhľadávanie: ");
+                        System.out.print("\nZadajte ID zamestnanca pre vyhľadávanie: ");
                             int idHladany = Integer.parseInt(sc.nextLine());
                             db.vypisZamestnanca(idHladany);
                         break;
 
                     case "e":
-                        System.out.print("Zadajte ID pre spustenie dovednosti: ");
+                        System.out.print("\nZadajte ID pre spustenie dovednosti: ");
                         int idDovednost = Integer.parseInt(sc.nextLine());
                         db.spustitDovednost(idDovednost);
                         break;
@@ -112,7 +107,7 @@ public class Main
                         break;
 
                     case "i":
-                        System.out.print("Zadajte ID zamestnanca na uloženie: ");
+                        System.out.print("\nZadajte ID zamestnanca na uloženie: ");
                         int idNaUlozenie = Integer.parseInt(sc.nextLine());
                         System.out.print("Zadajte názov súboru (v tvare xx.txt) ");
                         String menoSuboruUlozit = sc.nextLine();
@@ -120,7 +115,7 @@ public class Main
                         break;
 
                     case "j":
-                        System.out.print("Zadajte názov súboru na načítanie: ");
+                        System.out.print("\nZadajte názov súboru na načítanie: ");
                         String menoSuboruNacitat = sc.nextLine();
                         db.nacitajZamestnancaZoSuboru(menoSuboruNacitat);
                         break;
@@ -131,24 +126,24 @@ public class Main
 
                     case "x":
                         db.ulozData();
-                        System.out.println("\nUkladám dáta do SQL databázy...\n");
+                        System.out.println(Farby.AZUROVA + "\nUkladám dáta do SQL databázy...\n" + Farby.RESET);
                         db.ulozDoSQL();
                         bezi = false;
                         System.out.println(Farby.CERVENA + "\nProgram sa ukončuje..." + Farby.RESET);
                         break;
 
                     default:
-                        System.out.println("Neplatná voľba, skúste to znova.");
+                        System.out.println(Farby.CERVENA + "\nNeplatná voľba, skúste to znova." + Farby.RESET);
                 }
             }
 
             catch (NumberFormatException e)
             {
-                System.out.println("Zadajte platné číslo.");
+                System.out.print(Farby.CERVENA + "\nZadajte platné číslo." + Farby.RESET);
             }
             catch (Exception e)
             {
-                System.out.println("Vyskytla sa neočakávaná chyba: " + e.getMessage());
+                System.out.print(Farby.CERVENA + "\nVyskytla sa neočakávaná chyba: " + e.getMessage() + Farby.RESET);
             }
         }
         sc.close();

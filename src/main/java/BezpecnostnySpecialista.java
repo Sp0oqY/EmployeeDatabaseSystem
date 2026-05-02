@@ -1,16 +1,20 @@
+
+
 public class BezpecnostnySpecialista extends Zamestnanec
 {
-    public BezpecnostnySpecialista(int id, String meno, String priezvisko, int rokNarodenia){
+    public BezpecnostnySpecialista(int id, String meno, String priezvisko, int rokNarodenia)
+    {
         super(id, meno, priezvisko, rokNarodenia);
     }
 
     @Override
-    public void vykonajAnalyzu(){
-        System.out.println("Analyza rizika pre specialistu: " + getMeno() + " " + getPriezvisko());
+    public void vykonajAnalyzu()
+    {
+        System.out.println("\nAnalýza rizika pre špecialistu: "+ Farby.ZLTA + getMeno() + " " + getPriezvisko() + Farby.RESET);
 
         if(spolupracovnici.isEmpty())
         {
-            System.out.println("Ziadny spolupracovnici - riziko nejde urcit. ");
+            System.out.println(Farby.CERVENA + "\nŽiadni spolupracovníci - riziko sa nedá určiť.");
             return;
         } 
 
@@ -27,14 +31,17 @@ public class BezpecnostnySpecialista extends Zamestnanec
         }
 
         double vysledok = celkoveSkore / spolupracovnici.size();
-        System.out.println("Pocet sledovanych vazieb: " + spolupracovnici.size());
-        System.out.println("Priemerny koeficient rizika: " + vysledok);
+        System.out.println("\nPočet sledovaných väzieb: " + spolupracovnici.size());
+        System.out.println("Priemerný koeficient rizika: " + vysledok);
 
-        if(vysledok > 2.0){
-            System.out.println("VAROVANIE: Vysoke bezpecnostne riziko!");
+        if(vysledok > 2.0)
+        {
+            System.out.println(Farby.CERVENA + "\nVAROVANIE: Vysoké bezpečnostné riziko!" + Farby.RESET);
         }
-        else{
-            System.out.println("STATUS: Bezpecny. ");
+
+        else
+        {
+            System.out.println(Farby.ZELENA + "\nSTATUS: Bezpečný." + Farby.RESET);
         }
     }
 }
