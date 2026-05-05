@@ -1,3 +1,0 @@
-2026-05-01 22:38:18.757873+02:00 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "ZAMESTNANCI" not found (this database is empty); SQL statement:
-SELECT * FROM zamestnanci [42104-224]
